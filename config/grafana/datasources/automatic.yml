@@ -7,7 +7,7 @@ datasources:
   typeName: Prometheus
   typeLogoUrl: public/app/plugins/datasource/prometheus/img/prometheus_logo.svg
   access: proxy
-  url: http://prometheus:9090
+  url: http://netprobe-prometheus:9090
   user: ""
   database: ""
   basicAuth: false

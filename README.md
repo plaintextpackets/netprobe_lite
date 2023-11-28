@@ -1,6 +1,6 @@
 # Netprobe Lite
 
-Simple and effective tool for measuring ISP performance at home. The tool measures several performance metrics including packet loss, latency and DNS performance. It also aggregates these metrics into a common score, which you can use to monitor overall health of your internet connection.
+Simple and effective tool for measuring ISP performance at home. The tool measures several performance metrics including packet loss, latency, jitter and DNS performance. It also aggregates these metrics into a common score, which you can use to monitor overall health of your internet connection.
 
 ## Requirements and Setup
 
@@ -31,4 +31,12 @@ docker compose up
 2. Default user / pass is 'admin/admin'. Login to Grafana and set a custom password.
 
 3. Click on 'Menu -> Dashboards -> Netprobe' to view the dashboard (you should add the URL as a bookmark).
+
+# Data storage
+
+By default Docker will store the data collected in a volume, which will persist between restarts. 
+
+# Run on startup
+
+To configure the tool to work as a daemon (run on startup, keep running)
 
