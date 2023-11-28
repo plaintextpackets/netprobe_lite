@@ -278,7 +278,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "Health_Stats",
+          "expr": "Health_Stats * 100",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "instant": false,
@@ -550,12 +550,12 @@
             "uid": "PBFA97CFB590B2093"
           },
           "disableTextWrap": false,
-          "editorMode": "builder",
+          "editorMode": "code",
           "expr": "Network_Stats{type=\"loss\"}",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "instant": false,
-          "legendFormat": "__auto",
+          "legendFormat": "Packet loss",
           "range": true,
           "refId": "A",
           "useBackend": false
@@ -810,12 +810,12 @@
             "uid": "PBFA97CFB590B2093"
           },
           "disableTextWrap": false,
-          "editorMode": "builder",
+          "editorMode": "code",
           "expr": "Network_Stats{type=\"latency\"}",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "instant": false,
-          "legendFormat": "__auto",
+          "legendFormat": "Latency",
           "range": true,
           "refId": "A",
           "useBackend": false
@@ -986,7 +986,7 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "fixedColor": "dark-blue",
+            "fixedColor": "purple",
             "mode": "fixed"
           },
           "custom": {
@@ -1071,12 +1071,12 @@
             "uid": "PBFA97CFB590B2093"
           },
           "disableTextWrap": false,
-          "editorMode": "builder",
+          "editorMode": "code",
           "expr": "Network_Stats{type=\"jitter\"}",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "instant": false,
-          "legendFormat": "__auto",
+          "legendFormat": "Jitter",
           "range": true,
           "refId": "A",
           "useBackend": false
