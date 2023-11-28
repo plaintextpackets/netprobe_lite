@@ -1,0 +1,35 @@
+services:
+  redis:
+    container_name: redis
+    image: "redis:latest"
+    volumes:
+      - ./config/redis/redis.conf:/etc/redis/redis.conf
+  netprobe:
+    container_name: netprobe
+    build: .
+    volumes:
+      - .:/netprobe_lite
+    environment:
+      MODULE: "NETPROBE"
+  presentation:
+    container_name: presentation
+    build: .
+    volumes:
+      - .:/netprobe_lite
+    environment:
+      MODULE: "PRESENTATION"
+  prometheus:
+    container_name: prometheus
+    image: "prom/prometheus"
+    volumes:
+      - ./config/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+  grafana:
+    image: grafana/grafana-enterprise
+    container_name: grafana
+    volumes:
+      - ./config/grafana/datasources/automatic.yml:/etc/grafana/provisioning/datasources/automatic.yml
+      - ./config/grafana/dashboards/main.yml:/etc/grafana/provisioning/dashboards/main.yml
+      - ./config/grafana/dashboards/netprobe.json:/var/lib/grafana/dashboards/netprobe.json
+
+    ports:
+     - '3001:3000'

@@ -1,0 +1,17 @@
+datasources:
+- id: 3
+  uid: Zd5Cyo04z
+  orgId: 1
+  name: Prometheus
+  type: prometheus
+  typeName: Prometheus
+  typeLogoUrl: public/app/plugins/datasource/prometheus/img/prometheus_logo.svg
+  access: proxy
+  url: http://prometheus:9090
+  user: ""
+  database: ""
+  basicAuth: false
+  isDefault: false
+  jsonData:
+    httpMethod: POST
+  readOnly: false
