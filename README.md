@@ -32,11 +32,9 @@ docker compose down
 
 # How to use
 
-1. Navigate to: http://x.x.x.x:3001/ where x.x.x.x = IP of the probe machine running Docker.
+1. Navigate to: http://x.x.x.x:3001/d/app/netprobe where x.x.x.x = IP of the probe machine running Docker.
 
 2. Default user / pass is 'admin/admin'. Login to Grafana and set a custom password.
-
-3. Click on 'Menu -> Dashboards -> Netprobe' to view the dashboard (you should add the URL as a bookmark).
 
 # Data storage
 
