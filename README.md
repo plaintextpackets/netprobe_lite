@@ -24,6 +24,12 @@ git clone https://github.com/riyaadali/netprobe_lite.git
 docker compose up
 ```
 
+3. To shut down the app, use docker compose again:
+
+```
+docker compose down
+```
+
 # How to use
 
 1. Navigate to: http://x.x.x.x:3001/ where x.x.x.x = IP of the probe machine running Docker.
@@ -34,9 +40,29 @@ docker compose up
 
 # Data storage
 
-By default Docker will store the data collected in a volume, which will persist between restarts. 
+By default Docker will store the data collected in a volume, which will persist between restarts.
+
+To clear out old data, you need to first delete the prometheus container:
+
+```
+docker rm netprobe-prometheus
+```
+
+Then prune the docker volumes:
+
+```
+docker volume prune
+```
+
+When started again the old data should be wiped out.
 
 # Run on startup
 
-To configure the tool to work as a daemon (run on startup, keep running)
+To configure the tool to work as a daemon (run on startup, keep running), edit 'compose.yml' and add the following to each service:
+
+```
+restart: always
+```
+
+More information can be found in the Docker documentation.
 
