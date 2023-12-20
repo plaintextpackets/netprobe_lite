@@ -17,13 +17,8 @@ class NetworkCollector(object): # Main network collection class
         self.dnsstats = [] # List of stat dicts
         self.dns_test_site = dns_test_site # Site used to test DNS response times
         self.nameservers = []
-        self.nameservers_external = nameservers_external
+        self.nameservers = nameservers_external
 
-
-        # Set initial DNS resolver list
-        init_resolver = dns.resolver.Resolver()
-        your_dns = init_resolver.nameservers[0]
-        self.nameservers = self.nameservers_external + [("My_DNS_Server",your_dns)]
 
     def pingtest(self,count,site):
 

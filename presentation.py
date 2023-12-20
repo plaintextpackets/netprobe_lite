@@ -27,6 +27,9 @@ class CustomCollector(object):
             logger.error("Could not connect to Redis")
             logger.debug("Could not connect to Redis",exc_info=1)
 
+        if not cache:
+            return
+
         results = cache.redis_read(Config_Presentation.device_id) # Get the latest results from Redis
 
         if results:

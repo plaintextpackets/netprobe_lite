@@ -25,11 +25,14 @@ class Config_Netprobe():
     DNS_NAMESERVER_2_IP = os.getenv('DNS_NAMESERVER_2_IP')
     DNS_NAMESERVER_3 = os.getenv('DNS_NAMESERVER_3')
     DNS_NAMESERVER_3_IP = os.getenv('DNS_NAMESERVER_3_IP')
+    DNS_NAMESERVER_4 = os.getenv('DNS_NAMESERVER_4')
+    DNS_NAMESERVER_4_IP = os.getenv('DNS_NAMESERVER_4_IP')    
 
     nameservers = [
         (DNS_NAMESERVER_1,DNS_NAMESERVER_1_IP),
         (DNS_NAMESERVER_2,DNS_NAMESERVER_2_IP),
         (DNS_NAMESERVER_3,DNS_NAMESERVER_3_IP),
+        (DNS_NAMESERVER_4,DNS_NAMESERVER_4_IP),        
     ]
 
 class Config_Redis():

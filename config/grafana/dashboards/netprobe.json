@@ -1226,7 +1226,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "avg(DNS_Stats)",
+          "expr": "DNS_Stats{server=\"My_DNS_Server\"}",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "instant": false,
@@ -1236,7 +1236,7 @@
           "useBackend": false
         }
       ],
-      "title": "DNS Response Time (Avg)",
+      "title": "DNS Response Time (My DNS Server)",
       "type": "gauge"
     },
     {
@@ -1416,20 +1416,20 @@
       "type": "text"
     }
   ],
-  "refresh": "30s",
+  "refresh": "",
   "schemaVersion": 38,
   "tags": [],
   "templating": {
     "list": []
   },
   "time": {
-    "from": "now-24h",
+    "from": "now-1h",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "",
   "title": "Netprobe",
   "uid": "app",
-  "version": 1,
+  "version": 2,
   "weekStart": ""
 }
