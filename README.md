@@ -10,7 +10,7 @@ To run Netprobe Lite, you'll need a PC running Docker connected directly to your
 
 2. Netprobe Lite should be installed on a machine (the 'probe') which has a wired Ethernet connectiont to your primary ISP router. This ensures the tests are accurately measuring your ISP performance and excluding and interference from your home network. An old PC with Linux installed is a great option for this.
 
-# Installation
+## Installation
 
 1. Clone the repo locally to the probe machine:
 
@@ -30,13 +30,13 @@ docker compose up
 docker compose down
 ```
 
-# How to use
+## How to use
 
 1. Navigate to: http://x.x.x.x:3001/d/app/netprobe where x.x.x.x = IP of the probe machine running Docker.
 
 2. Default user / pass is 'admin/admin'. Login to Grafana and set a custom password.
 
-# Customize DNS test
+### Customize DNS test
 
 If the DNS server your network uses is not already monitored, you can add in your DNS server IP for testing.
 
@@ -48,7 +48,7 @@ DNS_NAMESERVER_4_IP="8.8.8.8" # Replace this IP with the DNS server you use at h
 
 Change 8.8.8.8 to the IP of the DNS server you use, then restart the application (docker compose down / docker compose up)
 
-# Data storage
+### Data storage
 
 By default Docker will store the data collected in a volume, which will persist between restarts.
 
@@ -66,7 +66,7 @@ docker volume prune
 
 When started again the old data should be wiped out.
 
-# Run on startup
+### Run on startup
 
 To configure the tool to work as a daemon (run on startup, keep running), edit 'compose.yml' and add the following to each service:
 
