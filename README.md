@@ -36,6 +36,18 @@ docker compose down
 
 2. Default user / pass is 'admin/admin'. Login to Grafana and set a custom password.
 
+# Customize DNS test
+
+If the DNS server your network uses is not already monitored, you can add in your DNS server IP for testing.
+
+To do so, modify this line in .env:
+
+```
+DNS_NAMESERVER_4_IP="8.8.8.8" # Replace this IP with the DNS server you use at home
+```
+
+Change 8.8.8.8 to the IP of the DNS server you use, then restart the application (docker compose down / docker compose up)
+
 # Data storage
 
 By default Docker will store the data collected in a volume, which will persist between restarts.
