@@ -1,24 +1,24 @@
 # Netprobe Lite
 
-Simple and effective tool for measuring ISP performance at home. The tool measures several performance metrics including packet loss, latency, jitter and DNS performance. It also aggregates these metrics into a common score, which you can use to monitor overall health of your internet connection.
+Simple and effective tool for measuring ISP performance at home. The tool measures several performance metrics including packet loss, latency, jitter, and DNS performance. It also aggregates these metrics into a common score, which you can use to monitor overall health of your internet connection.
 
 ## Requirements and Setup
 
-To run Netprobe Lite, you'll need a PC running Docker connected directly to your ISP router. Specificially:
+To run Netprobe Lite, you'll need a PC running Docker connected directly to your ISP router. Specifically:
 
 1. Netprobe Lite requires the latest version of Docker. For instructions on installing Docker, see YouTube, it's super easy.
 
-2. Netprobe Lite should be installed on a machine (the 'probe') which has a wired Ethernet connectiont to your primary ISP router. This ensures the tests are accurately measuring your ISP performance and excluding and interference from your home network. An old PC with Linux installed is a great option for this.
+2. Netprobe Lite should be installed on a machine (the 'probe') which has a wired Ethernet connection to your primary ISP router. This ensures the tests are accurately measuring your ISP performance and excluding and interference from your home network. An old PC with Linux installed is a great option for this.
 
 ## Installation
 
 1. Clone the repo locally to the probe machine:
 
 ```
-git clone https://github.com/riyaadali/netprobe_lite.git
+git clone https://github.com/plaintextpackets/netprobe_lite.git
 ```
 
-2. From the cloned folder, using docker compose to launch the app:
+2. From the cloned folder, use docker compose to launch the app:
 
 ```
 docker compose up
@@ -38,7 +38,7 @@ docker compose down
 
 ### Customize DNS test
 
-If the DNS server your network uses is not already monitored, you can add in your DNS server IP for testing.
+If the DNS server your network uses is not already monitored, you can add your DNS server IP for testing.
 
 To do so, modify this line in .env:
 
@@ -50,9 +50,9 @@ Change 8.8.8.8 to the IP of the DNS server you use, then restart the application
 
 ### Data storage
 
-By default Docker will store the data collected in a volume, which will persist between restarts.
+By default, Docker will store the data collected in a volume, which will persist between restarts.
 
-To clear out old data, you need to first delete the prometheus container:
+To clear out old data, you need to first delete the Prometheus container:
 
 ```
 docker rm netprobe-prometheus
