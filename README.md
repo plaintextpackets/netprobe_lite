@@ -36,6 +36,17 @@ docker compose down
 
 2. Default user / pass is 'admin/admin'. Login to Grafana and set a custom password.
 
+### Change Netprobe port
+
+To change the port that Netprobe is running on, edit the 'compose.yml' file, under the 'grafana' section:
+
+```    
+ports:
+    - '3001:3000'
+```
+
+Change the port on the left to the port you want to access Netprobe on
+
 ### Customize DNS test
 
 If the DNS server your network uses is not already monitored, you can add in your DNS server IP for testing.
