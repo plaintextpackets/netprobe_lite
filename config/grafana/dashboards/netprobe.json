@@ -451,7 +451,7 @@
           "useBackend": false
         }
       ],
-      "title": "Pakcet Loss (Avg)",
+      "title": "Packet Loss (Avg)",
       "type": "gauge"
     },
     {
