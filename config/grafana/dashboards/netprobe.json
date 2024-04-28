@@ -101,9 +101,10 @@
         },
         "showThresholdLabels": false,
         "showThresholdMarkers": true,
+        "sizing": "auto",
         "text": {}
       },
-      "pluginVersion": "10.2.2",
+      "pluginVersion": "10.4.2",
       "targets": [
         {
           "datasource": {
@@ -317,10 +318,10 @@
           "showLineNumbers": false,
           "showMiniMap": false
         },
-        "content": "## Internet Quality Score\nThe Internet Quality Score is a calculated metric designed to provide you an idea of your inernet quality at any given time. This score is rated between 0 and 100, and measures the quality of your internet connection based on four metrics:\n\n- Packet loss\n- Latency\n- Jitter\n- DNS Response Times\n",
+        "content": "## Internet Quality Score\nThe Internet Quality Score is a metric designed to provide you an idea of your internet quality at any given time. The metric ranges from 0 and 100, and is comprised of four metrics (with associated weights):\n\n- Packet loss (60%)\n- Latency (15%)\n- Jitter (20%)\n- DNS Response Times (5%)\n",
         "mode": "markdown"
       },
-      "pluginVersion": "10.2.2",
+      "pluginVersion": "10.4.2",
       "targets": [
         {
           "application": {
@@ -430,9 +431,10 @@
         },
         "showThresholdLabels": false,
         "showThresholdMarkers": true,
+        "sizing": "auto",
         "text": {}
       },
-      "pluginVersion": "10.2.2",
+      "pluginVersion": "10.4.2",
       "targets": [
         {
           "datasource": {
@@ -441,7 +443,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "Network_Stats{type=\"loss\"}",
+          "expr": "Network_Stats{type=\"loss\", target=\"all\"}",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "instant": false,
@@ -463,7 +465,7 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "continuous-RdYlGr"
+            "mode": "palette-classic"
           },
           "custom": {
             "axisBorderShow": false,
@@ -521,7 +523,69 @@
           },
           "unit": "percent"
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "A"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "dark-red",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "B"
+            },
+            "properties": [
+              {
+                "id": "custom.lineWidth",
+                "value": 1
+              },
+              {
+                "id": "custom.lineStyle",
+                "value": {
+                  "dash": [
+                    10,
+                    10
+                  ],
+                  "fill": "dash"
+                }
+              }
+            ]
+          },
+          {
+            "__systemRef": "hideSeriesFrom",
+            "matcher": {
+              "id": "byNames",
+              "options": {
+                "mode": "exclude",
+                "names": [
+                  "average loss"
+                ],
+                "prefix": "All except:",
+                "readOnly": true
+              }
+            },
+            "properties": [
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": true
+                }
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 9,
@@ -535,7 +599,7 @@
           "calcs": [],
           "displayMode": "list",
           "placement": "bottom",
-          "showLegend": false
+          "showLegend": true
         },
         "tooltip": {
           "mode": "single",
@@ -550,14 +614,31 @@
             "uid": "PBFA97CFB590B2093"
           },
           "disableTextWrap": false,
-          "editorMode": "code",
-          "expr": "Network_Stats{type=\"loss\"}",
+          "editorMode": "builder",
+          "expr": "Network_Stats{type=\"loss\", target=\"all\"}",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "instant": false,
-          "legendFormat": "Packet loss",
+          "legendFormat": "average loss",
           "range": true,
           "refId": "A",
+          "useBackend": false
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "disableTextWrap": false,
+          "editorMode": "builder",
+          "expr": "Network_Stats{type=\"loss\", target!=\"all\"}",
+          "fullMetaSearch": false,
+          "hide": false,
+          "includeNullMetadata": true,
+          "instant": false,
+          "legendFormat": "{{ target }}",
+          "range": true,
+          "refId": "B",
           "useBackend": false
         }
       ],
@@ -582,10 +663,10 @@
           "showLineNumbers": false,
           "showMiniMap": false
         },
-        "content": "## Packet Loss\nThe % of packets (messages) that are lost when being transmitted over your internet connection. Packet loss should be 0% consistently with occasional spikes during peak home internet use. When internet use is low and packet loss persists, it could indicate:\n\n- Faulty internal hardware (including cabling or modem)\n- Faulty ISP hardware\n- ISP capacity problems\n",
+        "content": "## Packet Loss\nThe percentage of packets (messages) that are lost when being transmitted over your internet connection. Packet loss should be 0% consistently with occasional spikes during peak internet use. Persistent packet loss could indicate:\n\n- Faulty internal hardware (including cabling or modem)\n- Faulty ISP hardware\n- ISP capacity problems",
         "mode": "markdown"
       },
-      "pluginVersion": "10.2.2",
+      "pluginVersion": "10.4.2",
       "targets": [
         {
           "application": {
@@ -692,9 +773,10 @@
           "values": false
         },
         "showThresholdLabels": false,
-        "showThresholdMarkers": true
+        "showThresholdMarkers": true,
+        "sizing": "auto"
       },
-      "pluginVersion": "10.2.2",
+      "pluginVersion": "10.4.2",
       "targets": [
         {
           "datasource": {
@@ -703,7 +785,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "Network_Stats{type=\"latency\"}",
+          "expr": "Network_Stats{type=\"latency\", target=\"all\"}",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "instant": false,
@@ -726,7 +808,7 @@
         "defaults": {
           "color": {
             "fixedColor": "dark-blue",
-            "mode": "fixed"
+            "mode": "palette-classic"
           },
           "custom": {
             "axisBorderShow": false,
@@ -782,7 +864,69 @@
           },
           "unit": "ms"
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "B"
+            },
+            "properties": [
+              {
+                "id": "custom.lineStyle",
+                "value": {
+                  "dash": [
+                    10,
+                    10
+                  ],
+                  "fill": "dash"
+                }
+              },
+              {
+                "id": "custom.lineWidth",
+                "value": 1
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "A"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "dark-blue",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "__systemRef": "hideSeriesFrom",
+            "matcher": {
+              "id": "byNames",
+              "options": {
+                "mode": "exclude",
+                "names": [
+                  "average latency"
+                ],
+                "prefix": "All except:",
+                "readOnly": true
+              }
+            },
+            "properties": [
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": true
+                }
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 9,
@@ -796,7 +940,7 @@
           "calcs": [],
           "displayMode": "list",
           "placement": "bottom",
-          "showLegend": false
+          "showLegend": true
         },
         "tooltip": {
           "mode": "single",
@@ -810,14 +954,33 @@
             "uid": "PBFA97CFB590B2093"
           },
           "disableTextWrap": false,
-          "editorMode": "code",
-          "expr": "Network_Stats{type=\"latency\"}",
+          "editorMode": "builder",
+          "expr": "Network_Stats{type=\"latency\", target=\"all\"}",
           "fullMetaSearch": false,
+          "hide": false,
           "includeNullMetadata": true,
           "instant": false,
-          "legendFormat": "Latency",
+          "legendFormat": "average latency",
           "range": true,
           "refId": "A",
+          "useBackend": false
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "disableTextWrap": false,
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "Network_Stats{type=\"latency\", target!=\"all\"}",
+          "fullMetaSearch": false,
+          "hide": false,
+          "includeNullMetadata": true,
+          "instant": false,
+          "legendFormat": "{{ target }}",
+          "range": true,
+          "refId": "B",
           "useBackend": false
         }
       ],
@@ -842,10 +1005,10 @@
           "showLineNumbers": false,
           "showMiniMap": false
         },
-        "content": "## Latency to Anchors\nThe round trip time between the probe and several high-profile target websites, averaged. Latency is usually a function of distance between your site and the destinations. Higher latency means slower performance, even on a high speed connection. If your latency is in the red zone consistently, there could be several causes including:\n\n- Faulty internal hardware (including cabling or modem)\n- Faulty ISP hardware\n- ISP routing issue",
+        "content": "## Latency to Anchors\nThe time it takes to get packets to and from various well-known websites. Higher latency means slower performance, even on a high speed connection. If your latency is consistently high, there could be several causes including:\n\n- Faulty internal hardware (including cabling or modem)\n- Faulty ISP hardware\n- ISP routing issues",
         "mode": "markdown"
       },
-      "pluginVersion": "10.2.2",
+      "pluginVersion": "10.4.2",
       "targets": [
         {
           "application": {
@@ -953,9 +1116,10 @@
         },
         "showThresholdLabels": false,
         "showThresholdMarkers": true,
+        "sizing": "auto",
         "text": {}
       },
-      "pluginVersion": "10.2.2",
+      "pluginVersion": "10.4.2",
       "targets": [
         {
           "datasource": {
@@ -964,7 +1128,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "Network_Stats{type=\"jitter\"}",
+          "expr": "Network_Stats{type=\"jitter\", target=\"all\"}",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "instant": false,
@@ -987,7 +1151,7 @@
         "defaults": {
           "color": {
             "fixedColor": "purple",
-            "mode": "fixed"
+            "mode": "palette-classic"
           },
           "custom": {
             "axisBorderShow": false,
@@ -1043,7 +1207,69 @@
           },
           "unit": "ms"
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "A"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "purple",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "B"
+            },
+            "properties": [
+              {
+                "id": "custom.lineStyle",
+                "value": {
+                  "dash": [
+                    10,
+                    10
+                  ],
+                  "fill": "dash"
+                }
+              },
+              {
+                "id": "custom.lineWidth",
+                "value": 1
+              }
+            ]
+          },
+          {
+            "__systemRef": "hideSeriesFrom",
+            "matcher": {
+              "id": "byNames",
+              "options": {
+                "mode": "exclude",
+                "names": [
+                  "average jitter"
+                ],
+                "prefix": "All except:",
+                "readOnly": true
+              }
+            },
+            "properties": [
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": true
+                }
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 9,
@@ -1057,7 +1283,7 @@
           "calcs": [],
           "displayMode": "list",
           "placement": "bottom",
-          "showLegend": false
+          "showLegend": true
         },
         "tooltip": {
           "mode": "single",
@@ -1071,14 +1297,31 @@
             "uid": "PBFA97CFB590B2093"
           },
           "disableTextWrap": false,
-          "editorMode": "code",
-          "expr": "Network_Stats{type=\"jitter\"}",
+          "editorMode": "builder",
+          "expr": "Network_Stats{type=\"jitter\", target=\"all\"}",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "instant": false,
-          "legendFormat": "Jitter",
+          "legendFormat": "average jitter",
           "range": true,
           "refId": "A",
+          "useBackend": false
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "disableTextWrap": false,
+          "editorMode": "builder",
+          "expr": "Network_Stats{type=\"jitter\", target!=\"all\"}",
+          "fullMetaSearch": false,
+          "hide": false,
+          "includeNullMetadata": true,
+          "instant": false,
+          "legendFormat": "{{target}}",
+          "range": true,
+          "refId": "B",
           "useBackend": false
         }
       ],
@@ -1103,10 +1346,10 @@
           "showLineNumbers": false,
           "showMiniMap": false
         },
-        "content": "## Jitter\nJitter is the rate of change of your latency, or put simply how frequently your latency is changing. High jitter in the red zone can have a negative impact on real-time streaming applications, such as voice or video calls. Jitter is typically higher when you are at peak utilizaiton. Consistently high jitter could be caused due to:\n\n- Faulty internal hardware (including cabling or modem)\n- Faulty ISP hardware\n- Overuse of current internet capacity (hitting the limit)",
+        "content": "## Jitter\nJitter measures how frequently your latency is changing. High jitter in the red zone can have a negative impact on real-time streaming applications, such as gaming and voice calls. Consistently high jitter could be caused due to:\n- Faulty internal hardware (including cabling or modem)\n- Faulty ISP hardware\n- Overuse of current internet capacity (hitting the limit)",
         "mode": "markdown"
       },
-      "pluginVersion": "10.2.2",
+      "pluginVersion": "10.4.2",
       "targets": [
         {
           "application": {
@@ -1215,9 +1458,10 @@
           "values": false
         },
         "showThresholdLabels": false,
-        "showThresholdMarkers": true
+        "showThresholdMarkers": true,
+        "sizing": "auto"
       },
-      "pluginVersion": "10.2.2",
+      "pluginVersion": "10.4.2",
       "targets": [
         {
           "datasource": {
@@ -1358,10 +1602,10 @@
           "showLineNumbers": false,
           "showMiniMap": false
         },
-        "content": "## DNS Response Time\nDNS is the protocol used to turn website names into IP addresses. Almost every request to the internet starts with a DNS request. This graph shows the response time of your currently configured DNS server, as well as several popular public DNS servers. Your own DNS response time should be close to that of these public providers. Slow DNS response could be caused by:\n\n- Poor DNS server performance\n- High latency",
+        "content": "## DNS Response Time\nDNS is the protocol used to turn website names into IP addresses. Almost every request to the internet starts with a DNS request, so having fast DNS is vital. This graph compares the response time of your currently configured DNS server against several popular public DNS servers. Slow DNS response could be caused by:\n\n- Poor DNS server performance\n- High latency",
         "mode": "markdown"
       },
-      "pluginVersion": "10.2.2",
+      "pluginVersion": "10.4.2",
       "targets": [
         {
           "application": {
@@ -1417,7 +1661,7 @@
     }
   ],
   "refresh": "",
-  "schemaVersion": 38,
+  "schemaVersion": 39,
   "tags": [],
   "templating": {
     "list": []
@@ -1430,6 +1674,6 @@
   "timezone": "",
   "title": "Netprobe",
   "uid": "app",
-  "version": 2,
+  "version": 1,
   "weekStart": ""
 }

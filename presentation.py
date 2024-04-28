@@ -12,7 +12,6 @@ from config import Config_Presentation
 
 logger = setup_logging("logs/presentation.log")
 
-
 class CustomCollector(object):
     def __init__(self):
         pass
@@ -38,13 +37,19 @@ class CustomCollector(object):
         else:
             return
 
-        g = GaugeMetricFamily("Network_Stats", 'Network statistics for latency and loss from the probe to the destination', labels=['site_id','type'])
+        g = GaugeMetricFamily("Network_Stats", 'Network statistics for latency and loss from the probe to the destination', labels=['site_id','type','target'])
 
         total_latency = 0 # Calculate these in presentation rather than prom to reduce cardinality
         total_loss = 0
         total_jitter = 0
 
-        for item in stats['stats']:
+        for item in stats['stats']: # Expose each individual latency / loss metric for each site tested
+
+            g.add_metric([stats['site_id'],'latency',item['site']],item['latency'])
+            g.add_metric([stats['site_id'],'loss',item['site']],item['loss'])
+            g.add_metric([stats['site_id'],'jitter',item['site']],item['jitter'])            
+
+        for item in stats['stats']: # Aggregate all latency / loss metrics into one
 
             total_latency += float(item['latency'])
             total_loss += float(item['loss'])
@@ -54,9 +59,9 @@ class CustomCollector(object):
         average_loss = total_loss / len(stats['stats'])
         average_jitter = total_jitter / len(stats['stats'])
 
-        g.add_metric([stats['site_id'],'latency'],average_latency)
-        g.add_metric([stats['site_id'],'loss'],average_loss)
-        g.add_metric([stats['site_id'],'jitter'],average_jitter)        
+        g.add_metric([stats['site_id'],'latency','all'],average_latency)
+        g.add_metric([stats['site_id'],'loss','all'],average_loss)
+        g.add_metric([stats['site_id'],'jitter','all'],average_jitter)        
 
         yield g
 
@@ -111,7 +116,6 @@ class CustomCollector(object):
         i.add_metric([stats['site_id']],score)
 
         yield i
-
 
 
 if __name__ == '__main__':

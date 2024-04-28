@@ -1,11 +1,9 @@
-# Netprobe service
+# Netprobe Service
 
 import time
 from helpers.network_helper import *
 from helpers.http_helper import *
 from helpers.redis_helper import *
-from dotenv import load_dotenv
-import os
 from config import Config_Netprobe
 from datetime import datetime,timezone
 from helpers.logging_helper import *
@@ -22,14 +20,11 @@ if __name__ == '__main__':
     dns_test_site = Config_Netprobe.dns_test_site
     nameservers_external = Config_Netprobe.nameservers
 
-
     collector = NetworkCollector(sites,probe_count,device_id,site_id,dns_test_site,nameservers_external)
-    sendhome = CallHome()
 
-    # Logging config
+    # Logging Config
 
     logger = setup_logging("logs/netprobe.log")
-
 
     while True:
         
@@ -48,7 +43,7 @@ if __name__ == '__main__':
 
             cache = RedisConnect()
 
-            # Save data to Redis
+            # Save Data to Redis
 
             cache.redis_write(device_id,json.dumps(stats),45) # Store data with TTL 45s, which means when the probe goes down the key ages out
 
