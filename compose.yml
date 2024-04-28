@@ -20,7 +20,7 @@ services:
   netprobe:
     restart: always
     container_name: netprobe-probe
-    build: .
+    image: "plaintextpackets/netprobe:latest"
     volumes:
       - .:/netprobe_lite
     environment:
@@ -31,7 +31,7 @@ services:
   presentation:
     restart: always
     container_name: netprobe-presentation
-    build: .
+    image: "plaintextpackets/netprobe:latest"
     volumes:
       - .:/netprobe_lite
     environment:
