@@ -1,11 +1,9 @@
-version: '3.8'  # Use the desired Docker Compose version
+# Docker compose file for netprobe
+# https://github.com/plaintextpackets/netprobe_lite
+name: netprobe
 
 networks:
-  custom_network:
-    driver: bridge
-    ipam:
-      config:
-        - subnet: 172.21.0.0/16
+  netprobe-net:
 
 services:
   redis:
@@ -15,7 +13,7 @@ services:
     volumes:
       - ./config/redis/redis.conf:/etc/redis/redis.conf
     networks:
-      - custom_network  # Attach to the custom network
+      - netprobe-net  # Attach to the custom network
 
   netprobe:
     restart: always
@@ -26,7 +24,7 @@ services:
     environment:
       MODULE: "NETPROBE"
     networks:
-      - custom_network  # Attach to the custom network
+      - netprobe-net  # Attach to the custom network
 
   presentation:
     restart: always
@@ -37,7 +35,7 @@ services:
     environment:
       MODULE: "PRESENTATION"
     networks:
-      - custom_network  # Attach to the custom network
+      - netprobe-net  # Attach to the custom network
 
   prometheus:
     restart: always
@@ -46,7 +44,7 @@ services:
     volumes:
       - ./config/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
     networks:
-      - custom_network  # Attach to the custom network
+      - netprobe-net  # Attach to the custom network
 
   grafana:
     restart: always
@@ -59,4 +57,4 @@ services:
     ports:
       - '3001:3000'
     networks:
-      - custom_network  # Attach to the custom network
+      - netprobe-net  # Attach to the custom network
