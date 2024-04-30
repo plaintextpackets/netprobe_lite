@@ -2,6 +2,19 @@
 
 Simple and effective tool for measuring ISP performance at home. The tool measures several performance metrics including packet loss, latency, jitter, and DNS performance. It also aggregates these metrics into a common score, which you can use to monitor overall health of your internet connection.
 
+## Support the Project
+
+If you'd like to support the development of this project, feel free to buy me a coffee!
+
+https://buymeacoffee.com/plaintextpm
+
+## Full Tutorial
+
+Visit YouTube for a full tutorial on how to install and use Netprobe:
+
+https://youtu.be/Wn31husi6tc
+
+
 ## Requirements and Setup
 
 To run Netprobe Lite, you'll need a PC running Docker connected directly to your ISP router. Specifically:
@@ -59,23 +72,75 @@ DNS_NAMESERVER_4_IP="8.8.8.8" # Replace this IP with the DNS server you use at h
 
 Change 8.8.8.8 to the IP of the DNS server you use, then restart the application (docker compose down / docker compose up)
 
-### Data storage
+### Data storage - default method
 
-By default, Docker will store the data collected in a volume, which will persist between restarts.
+By default, Docker will store the data collected in several Docker volumes, which will persist between restarts.
 
-To clear out old data, you need to first delete the Prometheus container:
-
-```
-docker rm netprobe-prometheus
-```
-
-Then prune the docker volumes:
+They are:
 
 ```
-docker volume prune
+netprobe_lite_grafana_data (used to store Grafana user / pw)
+netprobe_lite_prometheus_data (used to store time series data)
+```
+
+To clear out old data, you need to stop the app and remove these volumes:
+
+```
+docker compose down
+docker volume rm netprobe_lite_grafana_data
+docker volume rm netprobe_lite_prometheus_data
 ```
 
 When started again the old data should be wiped out.
+
+### Data storage - bind mount method
+
+Using the default method, the data is stored within Docker volumes which you cannot easily access from the host itself. If you'd prefer storing data in mapped folders from the host, follow these instructions (thank you @Jeppedy):
+
+1. Clone the repo
+
+2. Inside the folder create two directories:
+
+```
+mkdir -p data/grafana data/prometheus 
+```
+
+3. Modify the compose.yml as follows (volume path as well as adding user ID):
+
+```
+  prometheus:
+    restart: always
+    container_name: netprobe-prometheus
+    image: "prom/prometheus"
+    volumes:
+      - ./config/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./data/prometheus:/prometheus # modify this to map to the folder you created
+
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+    networks:
+      - custom_network  # Attach to the custom network
+    user: "1000" # set this to the desired user with correct permissions to the bind mount
+
+  grafana:
+    restart: always
+    image: grafana/grafana-enterprise
+    container_name: netprobe-grafana
+    volumes:
+      - ./config/grafana/datasources/automatic.yml:/etc/grafana/provisioning/datasources/automatic.yml
+      - ./config/grafana/dashboards/main.yml:/etc/grafana/provisioning/dashboards/main.yml
+      - ./config/grafana/dashboards/netprobe.json:/var/lib/grafana/dashboards/netprobe.json
+      - ./data/grafana:/var/lib/grafana  # modify this to map to the folder you created
+    ports:
+      - '3001:3000'
+    networks:
+      - custom_network  # Attach to the custom network
+    user: "1000" # set this to the desired user with correct permissions to the bind mount
+```
+
+4. Remove the volumes section from compose.yml
+
 
 ### Run on startup
 

@@ -45,6 +45,10 @@ services:
     image: "prom/prometheus"
     volumes:
       - ./config/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus  # Persistent local storage for Prometheus data
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
     networks:
       - custom_network  # Attach to the custom network
 
@@ -56,7 +60,13 @@ services:
       - ./config/grafana/datasources/automatic.yml:/etc/grafana/provisioning/datasources/automatic.yml
       - ./config/grafana/dashboards/main.yml:/etc/grafana/provisioning/dashboards/main.yml
       - ./config/grafana/dashboards/netprobe.json:/var/lib/grafana/dashboards/netprobe.json
+      - grafana_data:/var/lib/grafana
     ports:
       - '3001:3000'
     networks:
       - custom_network  # Attach to the custom network
+
+volumes:
+  prometheus_data:
+  grafana_data:
+  
