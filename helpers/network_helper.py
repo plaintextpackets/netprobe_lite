@@ -68,10 +68,18 @@ class NetworkCollector(object): # Main network collection class
             }
 
             self.dnsstats.append(dnsdata)
+
         except Exception as e:
             print(f"Error performing DNS resolution on {nameserver}")
             print(e)
-            return False
+
+            dnsdata = {
+                "nameserver":nameserver[0],
+                "nameserver_ip":nameserver[1],
+                "latency":5000
+            }
+            
+            self.dnsstats.append(dnsdata)
 
         return True        
 
