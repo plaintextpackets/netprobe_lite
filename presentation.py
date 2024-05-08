@@ -75,6 +75,14 @@ class CustomCollector(object):
     
         yield h
 
+        s = GaugeMetricFamily("Speed_Stats", 'Speedtest performance statistics from speedtest.net', labels=['site_id','server'])
+
+        for key in stats['speed_stats'].keys():
+            if stats['speed_stats'][key]:
+                s.add_metric([stats['site_id'],key],stats['speed_stats'][key])
+    
+        yield s
+
         # Calculate overall health score
 
         weight_loss = Config_Presentation.weight_loss # Loss is 60% of score

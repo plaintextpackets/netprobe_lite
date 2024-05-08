@@ -19,8 +19,10 @@ if __name__ == '__main__':
     site_id = Config_Netprobe.site_id
     dns_test_site = Config_Netprobe.dns_test_site
     nameservers_external = Config_Netprobe.nameservers
+    speedtest_enabled = Config_Netprobe.speedtest_enabled
+    speedtest_interval_multiplier = Config_Netprobe.speedtest_interval_multiplier
 
-    collector = NetworkCollector(sites,probe_count,device_id,site_id,dns_test_site,nameservers_external)
+    collector = NetworkCollector(sites,probe_count,device_id,site_id,dns_test_site,nameservers_external,speedtest_enabled,speedtest_interval_multiplier)
 
     # Logging Config
 
