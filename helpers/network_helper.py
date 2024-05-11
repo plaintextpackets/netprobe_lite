@@ -5,10 +5,12 @@ from threading import Thread
 import dns.resolver
 import time
 
+import speedtest
+
 
 class NetworkCollector(object): # Main network collection class
 
-    def __init__(self,sites,count,device_id,site_id,dns_test_site,nameservers_external):
+    def __init__(self,sites,count,device_id,site_id,dns_test_site,nameservers_external,speedtest_enabled,speedtest_interval_multiplier):
         self.sites = sites # List of sites to ping
         self.count = str(count) # Number of pings
         self.device_id = device_id # Unique device ID
@@ -18,6 +20,10 @@ class NetworkCollector(object): # Main network collection class
         self.dns_test_site = dns_test_site # Site used to test DNS response times
         self.nameservers = []
         self.nameservers = nameservers_external
+        self.speedtest_enabled = speedtest_enabled
+        self.speedtest_interval_multiplier = speedtest_interval_multiplier
+        self.speedtest_count = self.speedtest_interval_multiplier # to start with a speedtest on startup
+        self.speedtest_stats = {"download": None, "upload": None}
 
 
     def pingtest(self,count,site):
@@ -81,7 +87,21 @@ class NetworkCollector(object): # Main network collection class
             
             self.dnsstats.append(dnsdata)
 
-        return True        
+        return True
+
+    def speedtest(self,threads=None):
+        if self.speedtest_count < self.speedtest_interval_multiplier:
+            self.speedtest_count += 1
+        else:
+            s = speedtest.Speedtest()
+            s.download(threads=threads)
+            s.upload(threads=threads)
+
+            self.speedtest_stats = {
+                "download": s.results.dict()["download"],
+                "upload": s.results.dict()["upload"]
+            }
+            self.speedtest_count = 0
 
     def collect(self):
 
@@ -112,13 +132,17 @@ class NetworkCollector(object): # Main network collection class
         # Wait for threads to complete
         for s in threads:
             s.join()
+        
+        if self.speedtest_enabled:
+            self.speedtest()
 
         results = json.dumps({
             "device_id":self.device_id,
             "site_id":self.site_id,
             "stats":self.stats,
-            "dns_stats":self.dnsstats
-        })    
+            "dns_stats":self.dnsstats,
+            "speed_stats":self.speedtest_stats
+        })
 
         return results
 
