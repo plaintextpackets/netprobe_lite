@@ -51,14 +51,14 @@ docker compose down
 
 ### Change Netprobe port
 
-To change the port that Netprobe is running on, edit the 'compose.yml' file, under the 'grafana' section:
+To change the port that Netprobe Lite is running on, edit the 'compose.yml' file, under the 'grafana' section:
 
 ```    
 ports:
     - '3001:3000'
 ```
 
-Change the port on the left to the port you want to access Netprobe on
+Change the port on the left to the port you want to access Netprobe Lite on
 
 ### Customize DNS test
 
@@ -151,6 +151,38 @@ restart: always
 ```
 
 More information can be found in the Docker documentation.
+
+## FAQ & Troubleshooting
+
+Q. How do I reset my Grafana password?
+
+A. Delete the docker volume for grafana. This will reset your password but will leave your data:
+
+```
+docker volume rm netprobe_grafana_data
+```
+
+Q. I am running Pihole and when I enter my host IP under 'DNS_NAMESERVER_4_IP=' I receive this error:
+
+```
+The resolution lifetime expired after 5.138 seconds: Server Do53:192.168.0.91@53 answered got a response from ('172.21.0.1', 53) instead of ('192.168.0.91', 53)
+```
+A. This is a limitation of Docker. If you are running another DNS server in Docker and want to test it in Netprobe, you need to specify the Docker network gateway IP:
+
+1. Stop netprobe but don't wipe it (docker compose down)
+2. Find the gateway IP of your netprobe-probe container:
+```
+$ docker inspect netprobe-probe | grep Gateway
+            "Gateway": "",
+            "IPv6Gateway": "",
+                    "Gateway": "192.168.208.1",
+                    "IPv6Gateway": "", 
+```
+3. Enter that IP (e.g. 182.168.208.1) into your .env file for 'DNS_NAMESERVER_4_IP='
+
+Q. I constantly see one of my DNS servers at 5s latency, is this normal?
+
+A. 5s is the timeout for DNS queries in Netprobe Lite. If you see this happening for one specific IP, likely your machine is having issues using that DNS server (and so you shouldn't use it for home use).
 
 ## License
 
