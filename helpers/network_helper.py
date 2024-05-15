@@ -3,27 +3,19 @@ import subprocess
 import json
 from threading import Thread
 import dns.resolver
-import time
-
 import speedtest
 
 
 class NetworkCollector(object): # Main network collection class
 
-    def __init__(self,sites,count,device_id,site_id,dns_test_site,nameservers_external,speedtest_enabled,speedtest_interval_multiplier):
+    def __init__(self,sites,count,dns_test_site,nameservers_external):
         self.sites = sites # List of sites to ping
         self.count = str(count) # Number of pings
-        self.device_id = device_id # Unique device ID
-        self.site_id = site_id # Unique site ID
         self.stats = [] # List of stat dicts
         self.dnsstats = [] # List of stat dicts
         self.dns_test_site = dns_test_site # Site used to test DNS response times
         self.nameservers = []
         self.nameservers = nameservers_external
-        self.speedtest_enabled = speedtest_enabled
-        self.speedtest_interval_multiplier = speedtest_interval_multiplier
-        self.speedtest_count = self.speedtest_interval_multiplier # to start with a speedtest on startup
-        self.speedtest_stats = {"download": None, "upload": None}
 
 
     def pingtest(self,count,site):
@@ -89,20 +81,6 @@ class NetworkCollector(object): # Main network collection class
 
         return True
 
-    def speedtest(self,threads=None):
-        if self.speedtest_count < self.speedtest_interval_multiplier:
-            self.speedtest_count += 1
-        else:
-            s = speedtest.Speedtest()
-            s.download(threads=threads)
-            s.upload(threads=threads)
-
-            self.speedtest_stats = {
-                "download": s.results.dict()["download"],
-                "upload": s.results.dict()["upload"]
-            }
-            self.speedtest_count = 0
-
     def collect(self):
 
         # Empty preveious results
@@ -132,20 +110,41 @@ class NetworkCollector(object): # Main network collection class
         # Wait for threads to complete
         for s in threads:
             s.join()
-        
-        if self.speedtest_enabled:
-            self.speedtest()
 
         results = json.dumps({
-            "device_id":self.device_id,
-            "site_id":self.site_id,
             "stats":self.stats,
-            "dns_stats":self.dnsstats,
-            "speed_stats":self.speedtest_stats
+            "dns_stats":self.dnsstats
         })
 
         return results
 
+
+class Netprobe_Speedtest(object): # Speed test class
+
+    def __init__(self):
+        self.speedtest_stats = {"download": None, "upload": None}
+
+    def netprobe_speedtest(self):
+
+        s = speedtest.Speedtest()
+        s.get_best_server()
+        download = s.download()
+        upload = s.upload()
+
+        self.speedtest_stats = {
+            "download": download,
+            "upload": upload
+        }
+
+    def collect(self):
+
+        self.netprobe_speedtest()
+
+        results = json.dumps({
+            "speed_stats":self.speedtest_stats
+        })
+
+        return results
 
 
 

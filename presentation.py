@@ -1,7 +1,7 @@
 # Data presentation service (prometheus)
 
 import time
-from prometheus_client.core import GaugeMetricFamily, REGISTRY, CounterMetricFamily
+from prometheus_client.core import GaugeMetricFamily, REGISTRY
 from prometheus_client import start_http_server
 import json
 from helpers.redis_helper import *
@@ -22,66 +22,74 @@ class CustomCollector(object):
 
         try:
             cache = RedisConnect()
-        except:
+        except Exception as e:
             logger.error("Could not connect to Redis")
-            logger.debug("Could not connect to Redis",exc_info=1)
+            logger.error(e)
 
         if not cache:
             return
 
-        results = cache.redis_read(Config_Presentation.device_id) # Get the latest results from Redis
+        # Retrieve Netprobe data
 
-        if results:
-            stats = json.loads(json.loads(results))
-            logger.info(f"Logged device {Config_Presentation.device_id}")
+        results_netprobe = cache.redis_read('netprobe') # Get the latest results from Redis
+
+        if results_netprobe:
+            stats_netprobe = json.loads(json.loads(results_netprobe))
         else:
             return
 
-        g = GaugeMetricFamily("Network_Stats", 'Network statistics for latency and loss from the probe to the destination', labels=['site_id','type','target'])
+        g = GaugeMetricFamily("Network_Stats", 'Network statistics for latency and loss from the probe to the destination', labels=['type','target'])
 
         total_latency = 0 # Calculate these in presentation rather than prom to reduce cardinality
         total_loss = 0
         total_jitter = 0
 
-        for item in stats['stats']: # Expose each individual latency / loss metric for each site tested
+        for item in stats_netprobe['stats']: # Expose each individual latency / loss metric for each site tested
 
-            g.add_metric([stats['site_id'],'latency',item['site']],item['latency'])
-            g.add_metric([stats['site_id'],'loss',item['site']],item['loss'])
-            g.add_metric([stats['site_id'],'jitter',item['site']],item['jitter'])            
+            g.add_metric(['latency',item['site']],item['latency'])
+            g.add_metric(['loss',item['site']],item['loss'])
+            g.add_metric(['jitter',item['site']],item['jitter'])            
 
-        for item in stats['stats']: # Aggregate all latency / loss metrics into one
+        for item in stats_netprobe['stats']: # Aggregate all latency / loss metrics into one
 
             total_latency += float(item['latency'])
             total_loss += float(item['loss'])
             total_jitter += float(item['jitter'])
 
-        average_latency = total_latency / len(stats['stats'])
-        average_loss = total_loss / len(stats['stats'])
-        average_jitter = total_jitter / len(stats['stats'])
+        average_latency = total_latency / len(stats_netprobe['stats'])
+        average_loss = total_loss / len(stats_netprobe['stats'])
+        average_jitter = total_jitter / len(stats_netprobe['stats'])
 
-        g.add_metric([stats['site_id'],'latency','all'],average_latency)
-        g.add_metric([stats['site_id'],'loss','all'],average_loss)
-        g.add_metric([stats['site_id'],'jitter','all'],average_jitter)        
+        g.add_metric(['latency','all'],average_latency)
+        g.add_metric(['loss','all'],average_loss)
+        g.add_metric(['jitter','all'],average_jitter)        
 
         yield g
 
-        h = GaugeMetricFamily("DNS_Stats", 'DNS performance statistics for various DNS servers', labels=['site_id','server'])
+        h = GaugeMetricFamily("DNS_Stats", 'DNS performance statistics for various DNS servers', labels=['server'])
 
-        for item in stats['dns_stats']:
-            h.add_metric([stats['site_id'],item['nameserver']],item['latency'])
+        for item in stats_netprobe['dns_stats']:
+            h.add_metric([item['nameserver']],item['latency'])
 
             if item['nameserver'] == 'My_DNS_Server':
                 my_dns_latency = float(item['latency']) # Grab the current DNS latency of the probe's DNS resolver
     
         yield h
 
-        s = GaugeMetricFamily("Speed_Stats", 'Speedtest performance statistics from speedtest.net', labels=['site_id','server'])
+        # Retrieve Speedtest data
 
-        for key in stats['speed_stats'].keys():
-            if stats['speed_stats'][key]:
-                s.add_metric([stats['site_id'],key],stats['speed_stats'][key])
-    
-        yield s
+        results_speedtest = cache.redis_read('speedtest') # Get the latest results from Redis
+
+        if results_speedtest: # Speed test is optional
+            stats_speedtest = json.loads(json.loads(results_speedtest))
+
+            s = GaugeMetricFamily("Speed_Stats", 'Speedtest performance statistics from speedtest.net', labels=['direction'])
+
+            for key in stats_speedtest['speed_stats'].keys():
+                if stats_speedtest['speed_stats'][key]:
+                    s.add_metric([key],stats_speedtest['speed_stats'][key])
+        
+            yield s
 
         # Calculate overall health score
 
@@ -120,8 +128,8 @@ class CustomCollector(object):
 
         score = 1 - weight_loss * (eval_loss) - weight_jitter * (eval_jitter) - weight_latency * (eval_latency) - weight_dns_latency * (eval_dns_latency)
 
-        i = GaugeMetricFamily("Health_Stats", 'Overall internet health function', labels=['site_id'])
-        i.add_metric([stats['site_id']],score)
+        i = GaugeMetricFamily("Health_Stats", 'Overall internet health function')
+        i.add_metric(['health'],score)
 
         yield i
 
