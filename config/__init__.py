@@ -15,9 +15,9 @@ class Config_Netprobe():
     probe_interval = int(os.getenv('PROBE_INTERVAL'))
     probe_count = int(os.getenv('PROBE_COUNT'))
     sites = os.getenv('SITES').split(',')
-    device_id = os.getenv('DEVICE_ID')
-    site_id = os.getenv('SITE_ID')
     dns_test_site = os.getenv('DNS_TEST_SITE')
+    speedtest_enabled = os.getenv("SPEEDTEST_ENABLED", 'False').lower() in ('true', '1', 't')
+    speedtest_interval = int(os.getenv('SPEEDTEST_INTERVAL'))
 
     DNS_NAMESERVER_1 = os.getenv('DNS_NAMESERVER_1')
     DNS_NAMESERVER_1_IP = os.getenv('DNS_NAMESERVER_1_IP')

@@ -83,7 +83,7 @@
       },
       "gridPos": {
         "h": 9,
-        "w": 6,
+        "w": 5,
         "x": 0,
         "y": 0
       },
@@ -104,7 +104,7 @@
         "sizing": "auto",
         "text": {}
       },
-      "pluginVersion": "10.4.2",
+      "pluginVersion": "10.2.2",
       "targets": [
         {
           "datasource": {
@@ -253,8 +253,8 @@
       },
       "gridPos": {
         "h": 9,
-        "w": 13,
-        "x": 6,
+        "w": 14,
+        "x": 5,
         "y": 0
       },
       "id": 37,
@@ -321,7 +321,7 @@
         "content": "## Internet Quality Score\nThe Internet Quality Score is a metric designed to provide you an idea of your internet quality at any given time. The metric ranges from 0 and 100, and is comprised of four metrics (with associated weights):\n\n- Packet loss (60%)\n- Latency (15%)\n- Jitter (20%)\n- DNS Response Times (5%)\n",
         "mode": "markdown"
       },
-      "pluginVersion": "10.4.2",
+      "pluginVersion": "10.2.2",
       "targets": [
         {
           "application": {
@@ -413,7 +413,7 @@
       },
       "gridPos": {
         "h": 9,
-        "w": 6,
+        "w": 5,
         "x": 0,
         "y": 9
       },
@@ -434,7 +434,7 @@
         "sizing": "auto",
         "text": {}
       },
-      "pluginVersion": "10.4.2",
+      "pluginVersion": "10.2.2",
       "targets": [
         {
           "datasource": {
@@ -589,8 +589,8 @@
       },
       "gridPos": {
         "h": 9,
-        "w": 13,
-        "x": 6,
+        "w": 14,
+        "x": 5,
         "y": 9
       },
       "id": 36,
@@ -666,7 +666,7 @@
         "content": "## Packet Loss\nThe percentage of packets (messages) that are lost when being transmitted over your internet connection. Packet loss should be 0% consistently with occasional spikes during peak internet use. Persistent packet loss could indicate:\n\n- Faulty internal hardware (including cabling or modem)\n- Faulty ISP hardware\n- ISP capacity problems",
         "mode": "markdown"
       },
-      "pluginVersion": "10.4.2",
+      "pluginVersion": "10.2.2",
       "targets": [
         {
           "application": {
@@ -756,7 +756,7 @@
       },
       "gridPos": {
         "h": 9,
-        "w": 6,
+        "w": 5,
         "x": 0,
         "y": 18
       },
@@ -776,7 +776,7 @@
         "showThresholdMarkers": true,
         "sizing": "auto"
       },
-      "pluginVersion": "10.4.2",
+      "pluginVersion": "10.2.2",
       "targets": [
         {
           "datasource": {
@@ -930,8 +930,8 @@
       },
       "gridPos": {
         "h": 9,
-        "w": 13,
-        "x": 6,
+        "w": 14,
+        "x": 5,
         "y": 18
       },
       "id": 2,
@@ -1008,7 +1008,7 @@
         "content": "## Latency to Anchors\nThe time it takes to get packets to and from various well-known websites. Higher latency means slower performance, even on a high speed connection. If your latency is consistently high, there could be several causes including:\n\n- Faulty internal hardware (including cabling or modem)\n- Faulty ISP hardware\n- ISP routing issues",
         "mode": "markdown"
       },
-      "pluginVersion": "10.4.2",
+      "pluginVersion": "10.2.2",
       "targets": [
         {
           "application": {
@@ -1098,7 +1098,7 @@
       },
       "gridPos": {
         "h": 9,
-        "w": 6,
+        "w": 5,
         "x": 0,
         "y": 27
       },
@@ -1119,7 +1119,7 @@
         "sizing": "auto",
         "text": {}
       },
-      "pluginVersion": "10.4.2",
+      "pluginVersion": "10.2.2",
       "targets": [
         {
           "datasource": {
@@ -1273,8 +1273,8 @@
       },
       "gridPos": {
         "h": 9,
-        "w": 13,
-        "x": 6,
+        "w": 14,
+        "x": 5,
         "y": 27
       },
       "id": 27,
@@ -1349,7 +1349,7 @@
         "content": "## Jitter\nJitter measures how frequently your latency is changing. High jitter in the red zone can have a negative impact on real-time streaming applications, such as gaming and voice calls. Consistently high jitter could be caused due to:\n- Faulty internal hardware (including cabling or modem)\n- Faulty ISP hardware\n- Overuse of current internet capacity (hitting the limit)",
         "mode": "markdown"
       },
-      "pluginVersion": "10.4.2",
+      "pluginVersion": "10.2.2",
       "targets": [
         {
           "application": {
@@ -1441,7 +1441,7 @@
       },
       "gridPos": {
         "h": 9,
-        "w": 6,
+        "w": 5,
         "x": 0,
         "y": 36
       },
@@ -1461,7 +1461,7 @@
         "showThresholdMarkers": true,
         "sizing": "auto"
       },
-      "pluginVersion": "10.4.2",
+      "pluginVersion": "10.2.2",
       "targets": [
         {
           "datasource": {
@@ -1545,8 +1545,8 @@
       },
       "gridPos": {
         "h": 9,
-        "w": 13,
-        "x": 6,
+        "w": 14,
+        "x": 5,
         "y": 36
       },
       "id": 32,
@@ -1605,7 +1605,273 @@
         "content": "## DNS Response Time\nDNS is the protocol used to turn website names into IP addresses. Almost every request to the internet starts with a DNS request, so having fast DNS is vital. This graph compares the response time of your currently configured DNS server against several popular public DNS servers. Slow DNS response could be caused by:\n\n- Poor DNS server performance\n- High latency",
         "mode": "markdown"
       },
-      "pluginVersion": "10.4.2",
+      "pluginVersion": "10.2.2",
+      "targets": [
+        {
+          "application": {
+            "filter": ""
+          },
+          "datasource": {
+            "type": "alexanderzobnin-zabbix-datasource",
+            "uid": "zeKjzJc7z"
+          },
+          "functions": [],
+          "group": {
+            "filter": ""
+          },
+          "host": {
+            "filter": ""
+          },
+          "item": {
+            "filter": ""
+          },
+          "itemTag": {
+            "filter": ""
+          },
+          "options": {
+            "disableDataAlignment": false,
+            "showDisabledItems": false,
+            "skipEmptyValues": false,
+            "useZabbixValueMapping": false
+          },
+          "proxy": {
+            "filter": ""
+          },
+          "queryType": "0",
+          "refId": "A",
+          "resultFormat": "time_series",
+          "table": {
+            "skipEmptyValues": false
+          },
+          "tags": {
+            "filter": ""
+          },
+          "trigger": {
+            "filter": ""
+          },
+          "triggers": {
+            "acknowledged": 2,
+            "count": true,
+            "minSeverity": 3
+          }
+        }
+      ],
+      "transparent": true,
+      "type": "text"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PBFA97CFB590B2093"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 0,
+          "mappings": [],
+          "max": 120,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "bps"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 5,
+        "x": 0,
+        "y": 45
+      },
+      "id": 44,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "10.2.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "disableTextWrap": false,
+          "editorMode": "builder",
+          "expr": "Speed_Stats{direction=\"download\"}",
+          "fullMetaSearch": false,
+          "includeNullMetadata": true,
+          "instant": false,
+          "legendFormat": "Download",
+          "range": true,
+          "refId": "A",
+          "useBackend": false
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "disableTextWrap": false,
+          "editorMode": "builder",
+          "expr": "Speed_Stats{direction=\"upload\"}",
+          "fullMetaSearch": false,
+          "hide": false,
+          "includeNullMetadata": true,
+          "instant": false,
+          "legendFormat": "Upload",
+          "range": true,
+          "refId": "B",
+          "useBackend": false
+        }
+      ],
+      "title": "Internet Bandwidth (from speedtest.net)",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PBFA97CFB590B2093"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 7,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 3,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "bps"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 14,
+        "x": 5,
+        "y": 45
+      },
+      "id": 45,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "disableTextWrap": false,
+          "editorMode": "code",
+          "expr": "Speed_Stats",
+          "format": "time_series",
+          "fullMetaSearch": false,
+          "includeNullMetadata": true,
+          "instant": false,
+          "legendFormat": "{{direction}}",
+          "range": true,
+          "refId": "A",
+          "useBackend": false
+        }
+      ],
+      "transparent": true,
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "alexanderzobnin-zabbix-datasource",
+        "uid": "zeKjzJc7z"
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 5,
+        "x": 19,
+        "y": 45
+      },
+      "id": 46,
+      "options": {
+        "code": {
+          "language": "plaintext",
+          "showLineNumbers": false,
+          "showMiniMap": false
+        },
+        "content": "## Internet Bandwidth\nIf you don't see any data you need to explicitly enable the test in the .env file configuration.\n\nBandwidth is the maximum amount of data that can travel across your internet connection at a given time. It's measured in megabits per second (Mbps), similar to how water flow is measured. Less bandwidth than what you paid for can be caused by:\n\n- Other clients down-/uploading data\n- Faulty internal hardware (including cabling or modem)\n- Faulty ISP hardware\n- ISP capacity problems",
+        "mode": "markdown"
+      },
+      "pluginVersion": "10.2.2",
       "targets": [
         {
           "application": {
@@ -1660,14 +1926,14 @@
       "type": "text"
     }
   ],
-  "refresh": "",
-  "schemaVersion": 39,
+  "refresh": false,
+  "schemaVersion": 38,
   "tags": [],
   "templating": {
     "list": []
   },
   "time": {
-    "from": "now-1h",
+    "from": "now-3h",
     "to": "now"
   },
   "timepicker": {},

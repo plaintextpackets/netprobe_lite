@@ -3,3 +3,4 @@ requests==2.31.0
 redis==5.0.1
 python-dotenv==1.0.0
 dnspython==2.4.2
+speedtest-cli==2.1.3

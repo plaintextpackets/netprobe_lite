@@ -1,6 +1,6 @@
-# Netprobe Lite
+# Netprobe
 
-Simple and effective tool for measuring ISP performance at home. The tool measures several performance metrics including packet loss, latency, jitter, and DNS performance. It also aggregates these metrics into a common score, which you can use to monitor overall health of your internet connection.
+Simple and effective tool for measuring ISP performance at home. The tool measures several performance metrics including packet loss, latency, jitter, and DNS performance. It also has an optional speed test to measure bandwidth. Netprobe aggregates these metrics into a common score, which you can use to monitor overall health of your internet connection.
 
 ## Support the Project
 
@@ -17,13 +17,15 @@ https://youtu.be/Wn31husi6tc
 
 ## Requirements and Setup
 
-To run Netprobe Lite, you'll need a PC running Docker connected directly to your ISP router. Specifically:
+To run Netprobe, you'll need a PC running Docker connected directly to your ISP router. Specifically:
 
-1. Netprobe Lite requires the latest version of Docker. For instructions on installing Docker, see YouTube, it's super easy.
+1. Netprobe requires the latest version of Docker. For instructions on installing Docker, see YouTube, it's super easy.
 
-2. Netprobe Lite should be installed on a machine (the 'probe') which has a wired Ethernet connection to your primary ISP router. This ensures the tests are accurately measuring your ISP performance and excluding and interference from your home network. An old PC with Linux installed is a great option for this.
+2. Netprobe should be installed on a machine (the 'probe') which has a wired Ethernet connection to your primary ISP router. This ensures the tests are accurately measuring your ISP performance and excluding and interference from your home network. An old PC with Linux installed is a great option for this.
 
 ## Installation
+
+### First-time Install
 
 1. Clone the repo locally to the probe machine:
 
@@ -43,11 +45,45 @@ docker compose up
 docker compose down
 ```
 
+### Upgrading Between Versions
+
+When upgrading between versions, it is best to delete the deployment altogether and restart with the new code. The process is described below.
+
+1. Stop Netprobe in Docker and use the -v flag to delete all volumes (warning this deletes old data):
+
+```
+docker compose down -v
+```
+
+2. Clone the latest code (or download manually from Github and replace the current files):
+
+```
+git clone https://github.com/plaintextpackets/netprobe_lite.git
+```
+
+3. Re-start Netprobe:
+
+```
+docker compose up
+```
+
 ## How to use
 
 1. Navigate to: http://x.x.x.x:3001/d/app/netprobe where x.x.x.x = IP of the probe machine running Docker.
 
 2. Default user / pass is 'admin/admin'. Login to Grafana and set a custom password.
+
+## How to customize
+
+### Enable Speedtest
+
+By default the speed test feature is disabled as many users pay for bandwidth usage (e.g. cellular connections). To enable it, edit the .env file to set the option to 'True':
+
+```
+SPEEDTEST_ENABLED="True"
+```
+
+Note: speedtest.net has a limit on how frequently you can connection and run the test. If you set the test to run too frequently, you will receive errors. Recommend leaving the 'SPEEEDTEST_INTERVAL' unchanged.
 
 ### Change Netprobe port
 
@@ -72,6 +108,24 @@ DNS_NAMESERVER_4_IP="8.8.8.8" # Replace this IP with the DNS server you use at h
 
 Change 8.8.8.8 to the IP of the DNS server you use, then restart the application (docker compose down / docker compose up)
 
+### Use external Grafana
+
+Some users have their own Grafana instance running and would like to ingest Netprobe statistics there rather than running Grafana in Docker. To do this:
+
+1. In the compose.yaml file, add a port mapping to the Prometheus deployment config:
+
+```
+  prometheus:
+    ...
+    ports:
+      - 'XXXX:9090'    
+```
+... where XXXX is the port you wish to expose Prometheus on your host machine
+
+2. Remove all of the Grafana configuration from the compose.yaml file
+
+3. Run Netprobe and then add a datasource to your existing Grafana as http://x.x.x.x:XXXX where x.x.x.x = IP of the probe machine running Docker
+
 ### Data storage - default method
 
 By default, Docker will store the data collected in several Docker volumes, which will persist between restarts.
@@ -79,16 +133,16 @@ By default, Docker will store the data collected in several Docker volumes, whic
 They are:
 
 ```
-netprobe_lite_grafana_data (used to store Grafana user / pw)
-netprobe_lite_prometheus_data (used to store time series data)
+netprobe_grafana_data (used to store Grafana user / pw)
+netprobe_prometheus_data (used to store time series data)
 ```
 
 To clear out old data, you need to stop the app and remove these volumes:
 
 ```
 docker compose down
-docker volume rm netprobe_lite_grafana_data
-docker volume rm netprobe_lite_prometheus_data
+docker volume rm netprobe_grafana_data
+docker volume rm netprobe_prometheus_data
 ```
 
 When started again the old data should be wiped out.
@@ -144,13 +198,22 @@ mkdir -p data/grafana data/prometheus
 
 ### Run on startup
 
-To configure the tool to work as a daemon (run on startup, keep running), edit 'compose.yml' and add the following to each service:
+Netprobe will automatically restart itself after the host system is rebooted, provided that Docker is also launched on startup. If you want to disable this behavior, modify the 'restart' variables in the compose.yaml file to this: 
 
 ```
-restart: always
+restart: never
 ```
 
-More information can be found in the Docker documentation.
+### Wipe all stored data
+
+To wipe all stored data and remove the Docker volumes, use this command:
+
+```
+docker compose down -v
+```
+This will delete all containers and volumes related to Netprobe.
+
+
 
 ## FAQ & Troubleshooting
 

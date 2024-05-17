@@ -3,16 +3,14 @@ import subprocess
 import json
 from threading import Thread
 import dns.resolver
-import time
+import speedtest
 
 
 class NetworkCollector(object): # Main network collection class
 
-    def __init__(self,sites,count,device_id,site_id,dns_test_site,nameservers_external):
+    def __init__(self,sites,count,dns_test_site,nameservers_external):
         self.sites = sites # List of sites to ping
         self.count = str(count) # Number of pings
-        self.device_id = device_id # Unique device ID
-        self.site_id = site_id # Unique site ID
         self.stats = [] # List of stat dicts
         self.dnsstats = [] # List of stat dicts
         self.dns_test_site = dns_test_site # Site used to test DNS response times
@@ -81,7 +79,7 @@ class NetworkCollector(object): # Main network collection class
             
             self.dnsstats.append(dnsdata)
 
-        return True        
+        return True
 
     def collect(self):
 
@@ -114,14 +112,39 @@ class NetworkCollector(object): # Main network collection class
             s.join()
 
         results = json.dumps({
-            "device_id":self.device_id,
-            "site_id":self.site_id,
             "stats":self.stats,
             "dns_stats":self.dnsstats
-        })    
+        })
 
         return results
 
+
+class Netprobe_Speedtest(object): # Speed test class
+
+    def __init__(self):
+        self.speedtest_stats = {"download": None, "upload": None}
+
+    def netprobe_speedtest(self):
+
+        s = speedtest.Speedtest()
+        s.get_best_server()
+        download = s.download()
+        upload = s.upload()
+
+        self.speedtest_stats = {
+            "download": download,
+            "upload": upload
+        }
+
+    def collect(self):
+
+        self.netprobe_speedtest()
+
+        results = json.dumps({
+            "speed_stats":self.speedtest_stats
+        })
+
+        return results
 
 
 
