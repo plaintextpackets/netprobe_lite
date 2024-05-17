@@ -21,7 +21,7 @@ services:
   netprobe:
     restart: always
     container_name: netprobe-probe
-    image: "plaintextpackets/netprobe:speedtest"
+    image: "plaintextpackets/netprobe:latest"
     volumes:
       - .:/netprobe_lite
     environment:
@@ -35,7 +35,7 @@ services:
   speedtest:
     restart: always
     container_name: netprobe-speedtest
-    image: "plaintextpackets/netprobe:speedtest"
+    image: "plaintextpackets/netprobe:latest"
     volumes:
       - .:/netprobe_lite
     environment:
@@ -49,7 +49,7 @@ services:
   presentation:
     restart: always
     container_name: netprobe-presentation
-    image: "plaintextpackets/netprobe:speedtest"
+    image: "plaintextpackets/netprobe:latest"
     volumes:
       - .:/netprobe_lite
     environment:
