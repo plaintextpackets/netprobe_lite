@@ -41,9 +41,9 @@ if __name__ == '__main__':
 
             # Save Data to Redis
 
-            cahce_interval = speedtest_interval*2 # Set the redis cache 2x longer than the speedtest interval
+            cache_interval = speedtest_interval*2 # Set the redis cache 2x longer than the speedtest interval
 
-            cache.redis_write('speedtest',json.dumps(stats),cahce_interval)
+            cache.redis_write('speedtest',json.dumps(stats),cache_interval)
 
             logger.info(f"Stats successfully written to Redis for Speed Test")
 
@@ -51,6 +51,5 @@ if __name__ == '__main__':
 
             logger.error("Could not connect to Redis")
             logger.error(e)
-            logger.debug(exc_info=1)
         
         time.sleep(speedtest_interval)
