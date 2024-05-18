@@ -29,8 +29,9 @@ if __name__ == '__main__':
 
         except Exception as e:
             print("Error running speedtest")
-            logger.error("Error testing network")
+            logger.error("Error running speedtest")
             logger.error(e)
+            time.sleep(speedtest_interval)  # Pause before retrying
             continue
 
         # Connect to Redis
