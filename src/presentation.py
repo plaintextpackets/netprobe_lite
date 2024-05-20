@@ -10,7 +10,8 @@ from config import Config_Presentation
 
 # Logging config
 
-logger = setup_logging("logs/presentation.log")
+log_path = Config_Presentation.log_path
+logger = setup_logging(f"{log_path}/presentation.log")
 
 class CustomCollector(object):
     def __init__(self):

@@ -1,0 +1,28 @@
+# Docker compose file for netprobe
+# https://github.com/xian55/netprobe_lite
+
+services:
+  netprobe:
+    env_file:
+      - ./.env
+      - ./custom.env
+
+  speedtest:
+    env_file:
+      - ./.env
+      - ./custom.env
+
+  presentation:
+    env_file:
+      - ./.env
+      - ./custom.env
+
+  prometheus:
+    env_file:
+      - ./.env
+      - ./custom.env
+
+  grafana:
+    env_file:
+      - ./.env
+      - ./custom.env
