@@ -36,7 +36,7 @@ git clone https://github.com/plaintextpackets/netprobe_lite.git
 2. From the cloned folder, use docker compose to launch the app:
 
 ```shell
-source custom.env && source build.env && docker-compose -f docker-compose.yml -f example.docker-compose.override.yml up --build
+source build.env && docker-compose -f docker-compose.yml -f example.docker-compose.override.yml up --build
 ```
 
 3. To shut down the app, use docker compose again:
@@ -232,7 +232,7 @@ git clone https://github.com/plaintextpackets/netprobe_lite.git
 3. Re-start Netprobe:
 
 ```shell
-source custom.env && source build.env && docker-compose -f docker-compose.yml -f example.docker-compose.override.yml up --build
+source build.env && docker-compose -f docker-compose.yml -f example.docker-compose.override.yml up --build
 ```
 
 ## How to use
