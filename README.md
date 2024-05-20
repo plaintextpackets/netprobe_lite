@@ -71,7 +71,7 @@ source build.env
 
 ### Portrainer support
 
-1. Checkout the repo for a given path (windows: linux /project/)
+1. Checkout the repo for a given path (linux /project/)
 1. Navigate to Portrainer
 2. Open up Stack
 3. (+) Add Stack
@@ -232,7 +232,7 @@ git clone https://github.com/plaintextpackets/netprobe_lite.git
 3. Re-start Netprobe:
 
 ```shell
-docker compose up
+docker-compose -f docker-compose.yml -f example.docker-compose.override.yml up
 ```
 
 ## How to use
