@@ -20,7 +20,7 @@ class NetworkCollector(object): # Main network collection class
 
     def pingtest(self,count,site):
 
-        ping = subprocess.getoutput(f"ping -n -i 0.1 -c {count} {site} | grep 'rtt\|loss'")
+        ping = subprocess.getoutput(f"ping -n -i 0.1 -c {count} {site} | grep 'rtt\\|loss'")
 
         try:
             loss = ping.split(' ')[5].strip('%')

@@ -29,21 +29,189 @@ To run Netprobe, you'll need a PC running Docker connected directly to your ISP 
 
 1. Clone the repo locally to the probe machine:
 
-```
+```shell
 git clone https://github.com/plaintextpackets/netprobe_lite.git
 ```
 
 2. From the cloned folder, use docker compose to launch the app:
 
-```
-docker compose up
+```shell
+source build.env && docker-compose -f docker-compose.yml -f example.docker-compose.override.yml up --build
 ```
 
 3. To shut down the app, use docker compose again:
 
-```
+```shell
 docker compose down
 ```
+
+### Developers, Build and Publish to hub.Docker.com
+
+Used environment variables in the Dockerfile
+* `DOCKER_REGISTRY` # https://hub.docker.com/repository/docker/$DOCKER_REGISTRY
+* `BASE_IMAGE_ARCH` # arm32v7
+* `PYTHON_VERSION`  # 3.12
+
+1. After finished the development locally.
+2. Edit the `build.env` file with your info.
+
+```shell
+source build.env
+```
+
+1. Builds multi arch manifest including
+- `amd64`
+- `arm32v7`
+- `arm64v8`
+2. Then publishes them to the given `$DOCKER_REGISTRY` with `latest` tag.
+
+```shell
+./build_publish.sh
+```
+
+### Portrainer support
+
+1. Checkout the repo for a given path (linux /project/)
+1. Navigate to Portrainer
+2. Open up Stack
+3. (+) Add Stack
+4. Choose Web Editor (using `docker-compose.yml`, since `docker-compose.override.yml` is not supported we have to create a workaround)
+
+Use the following `docker-compose.yml`
+```yml
+# Docker compose file for netprobe
+# https://github.com/xian55/netprobe_lite
+name: netprobe
+
+networks:
+  netprobe-net:
+
+services:
+  redis:
+    restart: always
+    container_name: netprobe-redis
+    image: "redis:latest"
+    volumes:
+      - /{REPLACE_ME}/config/redis/:/etc/redis/
+      - /{REPLACE_ME}/logs:/logs
+    networks:
+      - netprobe-net
+    env_file:
+      - stack.env
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
+
+  netprobe:
+    restart: always
+    container_name: netprobe-probe
+    image: "${DOCKER_REGISTRY}:latest"
+    environment:
+      MODULE: "NETPROBE"
+    volumes:
+      - /{REPLACE_ME}/logs:/logs
+    env_file:
+      - stack.env
+    networks:
+      - netprobe-net
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
+
+  speedtest:
+    restart: always
+    container_name: netprobe-speedtest
+    image: "${DOCKER_REGISTRY}:latest"
+    environment:
+      MODULE: "SPEEDTEST"
+    env_file:
+      - stack.env
+    volumes:
+      - /{REPLACE_ME}/logs:/logs
+    networks:
+      - netprobe-net
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
+
+  presentation:
+    restart: always
+    container_name: netprobe-presentation
+    image: "${DOCKER_REGISTRY}:latest"
+    environment:
+      MODULE: "PRESENTATION"
+    env_file:
+      - stack.env
+    networks:
+      - netprobe-net
+    volumes:
+      - /{REPLACE_ME}/logs:/logs
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
+
+  prometheus:
+    restart: always
+    container_name: netprobe-prometheus
+    image: "prom/prometheus"
+    env_file:
+      - stack.env
+    volumes:
+      - /{REPLACE_ME}/logs:/logs
+      - /{REPLACE_ME}/config/prometheus/:/etc/prometheus/
+      - prometheus_data:/prometheus # Persistent local storage for Prometheus data
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+    networks:
+      - netprobe-net
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
+
+  grafana:
+    restart: always
+    image: grafana/grafana-enterprise
+    container_name: netprobe-grafana
+    env_file:
+      - stack.env
+    volumes:
+      - /{REPLACE_ME}/logs:/logs
+      - /{REPLACE_ME}/config/grafana/datasources/:/etc/grafana/provisioning/datasources/
+      - /{REPLACE_ME}/config/grafana/dashboards/:/etc/grafana/provisioning/dashboards/
+      - /{REPLACE_ME}/config/grafana/dashboards/:/var/lib/grafana/dashboards/
+      - grafana_data:/var/lib/grafana
+    ports:
+      - '3001:3000'
+    networks:
+      - netprobe-net
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
+
+volumes:
+  prometheus_data:
+  grafana_data:
+```
+
+5. It is really important to set the `env_file` thats how you can pass the environment variables to the containers
+```yml
+    env_file:
+      - stack.env
+```
+
+6. You might have noticed two baked in variables while mounting from the host machine
+* `/{REPLACE_ME}/config`
+* `/{REPLACE_ME}/logs`
+
+7. Replace these what you like on your host machine, example: `/project/config` and `/project/logs`
+8. Then i suggest load the `.env` file using the `Load variables from .env file` button
+9. Lastly create a new `custom.env` file and place there all the changes what you wish to make over the base `.env` file
+10. Then once again load the `custom.env` file using the `Load variables from .env file` button
+11. You should be able to see the environment variables loaded, you may notice that the `custom.env` duplicated what you want to override.
+12. Be sure to delete those environment variable keys which you want to overwrite.
+13. Then finally press the `Update the stack` button.
+14. The Containers should come online.
 
 ### Upgrading Between Versions
 
@@ -51,20 +219,20 @@ When upgrading between versions, it is best to delete the deployment altogether 
 
 1. Stop Netprobe in Docker and use the -v flag to delete all volumes (warning this deletes old data):
 
-```
+```shell
 docker compose down -v
 ```
 
 2. Clone the latest code (or download manually from Github and replace the current files):
 
-```
+```shell
 git clone https://github.com/plaintextpackets/netprobe_lite.git
 ```
 
 3. Re-start Netprobe:
 
-```
-docker compose up
+```shell
+source build.env && docker-compose -f docker-compose.yml -f example.docker-compose.override.yml up --build
 ```
 
 ## How to use
@@ -79,7 +247,7 @@ docker compose up
 
 By default the speed test feature is disabled as many users pay for bandwidth usage (e.g. cellular connections). To enable it, edit the .env file to set the option to 'True':
 
-```
+```shell
 SPEEDTEST_ENABLED="True"
 ```
 
@@ -89,7 +257,7 @@ Note: speedtest.net has a limit on how frequently you can connection and run the
 
 To change the port that Netprobe Lite is running on, edit the 'compose.yml' file, under the 'grafana' section:
 
-```    
+```shell
 ports:
     - '3001:3000'
 ```
@@ -102,7 +270,7 @@ If the DNS server your network uses is not already monitored, you can add your D
 
 To do so, modify this line in .env:
 
-```
+```shell
 DNS_NAMESERVER_4_IP="8.8.8.8" # Replace this IP with the DNS server you use at home
 ```
 
@@ -112,9 +280,9 @@ Change 8.8.8.8 to the IP of the DNS server you use, then restart the application
 
 Some users have their own Grafana instance running and would like to ingest Netprobe statistics there rather than running Grafana in Docker. To do this:
 
-1. In the compose.yaml file, add a port mapping to the Prometheus deployment config:
+1. In the docker-compose.yaml file, add a port mapping to the Prometheus deployment config:
 
-```
+```yaml
   prometheus:
     ...
     ports:
@@ -132,14 +300,14 @@ By default, Docker will store the data collected in several Docker volumes, whic
 
 They are:
 
-```
+```shell
 netprobe_grafana_data (used to store Grafana user / pw)
 netprobe_prometheus_data (used to store time series data)
 ```
 
 To clear out old data, you need to stop the app and remove these volumes:
 
-```
+```shell
 docker compose down
 docker volume rm netprobe_grafana_data
 docker volume rm netprobe_prometheus_data
@@ -155,13 +323,13 @@ Using the default method, the data is stored within Docker volumes which you can
 
 2. Inside the folder create two directories:
 
-```
+```shell
 mkdir -p data/grafana data/prometheus 
 ```
 
-3. Modify the compose.yml as follows (volume path as well as adding user ID):
+3. Modify the `docker-compose.yml` as follows (volume path as well as adding user ID):
 
-```
+```yaml
   prometheus:
     restart: always
     container_name: netprobe-prometheus
@@ -200,7 +368,7 @@ mkdir -p data/grafana data/prometheus
 
 Netprobe will automatically restart itself after the host system is rebooted, provided that Docker is also launched on startup. If you want to disable this behavior, modify the 'restart' variables in the compose.yaml file to this: 
 
-```
+```yaml
 restart: never
 ```
 
@@ -208,7 +376,7 @@ restart: never
 
 To wipe all stored data and remove the Docker volumes, use this command:
 
-```
+```shell
 docker compose down -v
 ```
 This will delete all containers and volumes related to Netprobe.
@@ -221,7 +389,7 @@ Q. How do I reset my Grafana password?
 
 A. Delete the docker volume for grafana. This will reset your password but will leave your data:
 
-```
+```shell
 docker volume rm netprobe_grafana_data
 ```
 
@@ -234,7 +402,7 @@ A. This is a limitation of Docker. If you are running another DNS server in Dock
 
 1. Stop netprobe but don't wipe it (docker compose down)
 2. Find the gateway IP of your netprobe-probe container:
-```
+```shell
 $ docker inspect netprobe-probe | grep Gateway
             "Gateway": "",
             "IPv6Gateway": "",
