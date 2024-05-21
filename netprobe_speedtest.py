@@ -21,36 +21,40 @@ if __name__ == '__main__':
 
     logger = setup_logging("logs/speedtest.log")
 
-    while True:
-        
-        try:
-            stats = collector.collect()
-            current_time = datetime.now()
+    if speedtest_enabled == True:
+        while True:
+            
+            try:
+                stats = collector.collect()
+                current_time = datetime.now()
 
-        except Exception as e:
-            print("Error running speedtest")
-            logger.error("Error running speedtest")
-            logger.error(e)
-            time.sleep(speedtest_interval)  # Pause before retrying
-            continue
+            except Exception as e:
+                print("Error running speedtest")
+                logger.error("Error running speedtest")
+                logger.error(e)
+                time.sleep(speedtest_interval)  # Pause before retrying
+                continue
 
-        # Connect to Redis
+            # Connect to Redis
 
-        try:
+            try:
 
-            cache = RedisConnect()
+                cache = RedisConnect()
 
-            # Save Data to Redis
+                # Save Data to Redis
 
-            cache_interval = speedtest_interval*2 # Set the redis cache 2x longer than the speedtest interval
+                cache_interval = speedtest_interval*2 # Set the redis cache 2x longer than the speedtest interval
 
-            cache.redis_write('speedtest',json.dumps(stats),cache_interval)
+                cache.redis_write('speedtest',json.dumps(stats),cache_interval)
 
-            logger.info(f"Stats successfully written to Redis for Speed Test")
+                logger.info(f"Stats successfully written to Redis for Speed Test")
 
-        except Exception as e:
+            except Exception as e:
 
-            logger.error("Could not connect to Redis")
-            logger.error(e)
-        
-        time.sleep(speedtest_interval)
+                logger.error("Could not connect to Redis")
+                logger.error(e)
+            
+            time.sleep(speedtest_interval)
+
+    else:
+        logger.info("Speedtest disabled")

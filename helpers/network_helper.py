@@ -138,6 +138,7 @@ class Netprobe_Speedtest(object): # Speed test class
 
     def collect(self):
 
+        self.speedtest_stats = {"download": None, "upload": None}
         self.netprobe_speedtest()
 
         results = json.dumps({
