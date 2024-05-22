@@ -48,7 +48,7 @@ if __name__ == '__main__':
 
             cache.redis_write('netprobe',json.dumps(stats),cache_interval)
 
-            logger.info(f"Stats successfully written to Redis from device ID for Netprobe")
+            #logger.info(f"Stats successfully written to Redis from device ID for Netprobe")
 
         except Exception as e:
 
