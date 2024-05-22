@@ -22,6 +22,7 @@ if __name__ == '__main__':
     logger = setup_logging("logs/speedtest.log")
 
     if speedtest_enabled == True:
+        
         while True:
             
             try:
@@ -57,4 +58,4 @@ if __name__ == '__main__':
             time.sleep(speedtest_interval)
 
     else:
-        logger.info("Speedtest disabled")
+        exit()
