@@ -38,6 +38,9 @@ class CustomCollector(object):
         else:
             return
 
+        if not stats_netprobe.get('stats'):  # Check if 'stats' is empty or doesn't exist
+            return
+
         g = GaugeMetricFamily("Network_Stats", 'Network statistics for latency and loss from the probe to the destination', labels=['type','target'])
 
         total_latency = 0 # Calculate these in presentation rather than prom to reduce cardinality
