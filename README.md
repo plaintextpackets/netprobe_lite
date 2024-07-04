@@ -110,7 +110,7 @@ Change 8.8.8.8 to the IP of the DNS server you use, then restart the application
 
 To modify the port on which your DNS server responds, modify this line in .env:
 ```
-DNS_NAMESERVER_4_IP="53"
+DNS_SERVER_PORT="53"
 ```
 
 Change 53 to your desired port, then restart the application (docker compose down; docker compose up --detach)
