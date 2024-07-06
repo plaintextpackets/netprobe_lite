@@ -17,8 +17,9 @@ if __name__ == '__main__':
     sites = Config_Netprobe.sites
     dns_test_site = Config_Netprobe.dns_test_site
     nameservers_external = Config_Netprobe.nameservers
+    dns_port = Config_Netprobe.DNS_SERVER_PORT
 
-    collector = NetworkCollector(sites,probe_count,dns_test_site,nameservers_external)
+    collector = NetworkCollector(sites,probe_count,dns_test_site,nameservers_external,dns_port)
 
     # Logging Config
 
