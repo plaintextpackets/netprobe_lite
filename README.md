@@ -49,7 +49,7 @@ docker compose down
 
 Used environment variables in the Dockerfile
 * `DOCKER_REGISTRY` # https://hub.docker.com/repository/docker/$DOCKER_REGISTRY
-* `BASE_IMAGE_ARCH` # arm32v7
+* `BASE_IMAGE_ARCH` # arm32v8
 * `PYTHON_VERSION`  # 3.12
 
 1. After finished the development locally.
@@ -63,7 +63,8 @@ source build.env
 - `amd64`
 - `arm32v7`
 - `arm64v8`
-2. Then publishes them to the given `$DOCKER_REGISTRY` with `latest` tag.
+1. Then publishes them to the given `$DOCKER_REGISTRY` with `latest` tag.
+1. Be sure you are logged in to docker hub by `docker login` command!
 
 ```shell
 ./build_publish.sh
