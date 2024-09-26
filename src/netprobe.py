@@ -22,11 +22,11 @@ if __name__ == '__main__':
 
     # Logging Config
 
-    log_path = Config_Netprobe.log_path
+    log_path = "/logs"
     logger = setup_logging(f"{log_path}/netprobe.log")
 
     # Logging each nameserver
-    for nameserver, ip in nameservers:
+    for nameserver, ip in nameservers_external:
         logger.info(f"Nameserver: {nameserver}, IP: {ip}")
 
     while True:

@@ -19,7 +19,7 @@ if __name__ == '__main__':
 
     # Logging Config
 
-    log_path = Config_Netprobe.log_path
+    log_path = "/logs"
     logger = setup_logging(f"{log_path}/speedtest.log")
 
     while True:
