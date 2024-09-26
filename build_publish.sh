@@ -12,7 +12,7 @@ echo " "
 docker build -t $registry:manifest-amd64 \
 --build-arg BASE_IMAGE_ARCH=amd64 \
 --build-arg PYTHON_VERSION=$python_version \
---build-arg ARCH=amd64/ .
+--platform windows/amd64 .
 
 docker push $registry:manifest-amd64
 
@@ -20,7 +20,7 @@ docker push $registry:manifest-amd64
 docker build -t $registry:manifest-arm32v7 \
 --build-arg BASE_IMAGE_ARCH=arm32v7 \
 --build-arg PYTHON_VERSION=$python_version \
---build-arg ARCH=arm32v7/ .
+--platform linux/arm/v7 .
 
 docker push $registry:manifest-arm32v7
 
@@ -29,7 +29,7 @@ docker push $registry:manifest-arm32v7
 docker build -t $registry:manifest-arm64v8 \
 --build-arg BASE_IMAGE_ARCH=arm64v8 \
 --build-arg PYTHON_VERSION=$python_version \
---build-arg ARCH=arm64v8/ .
+--platform linux/arm64 .
 
 docker push $registry:manifest-arm64v8
 
