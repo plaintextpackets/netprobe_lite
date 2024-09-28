@@ -32,7 +32,7 @@ services:
       - 8.8.4.4
 
   speedtest:
-    restart: always
+    restart: on-failure
     container_name: netprobe-speedtest
     image: "${DOCKER_REGISTRY}:latest"
     environment:

@@ -10,17 +10,20 @@ from helpers.logging_helper import *
 
 if __name__ == '__main__':
 
-    # Global Variables
-
-    speedtest_enabled = Config_Netprobe.speedtest_enabled
-    speedtest_interval = Config_Netprobe.speedtest_interval
-
-    collector = Netprobe_Speedtest()
-
     # Logging Config
 
     log_path = "/logs"
     logger = setup_logging(f"{log_path}/speedtest.log")
+
+    # Global Variables
+
+    if Config_Netprobe.speedtest_enabled == False:
+        logger.info("Speedtest is disabled. Exiting.")
+        exit()
+
+    speedtest_interval = Config_Netprobe.speedtest_interval
+
+    collector = Netprobe_Speedtest()
 
     while True:
         
