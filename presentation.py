@@ -44,6 +44,10 @@ class CustomCollector(object):
         total_loss = 0
         total_jitter = 0
 
+        average_latency = 0
+        average_loss = 0
+        average_jitter = 0
+
         # Check if there are any stats before proceeding
         if len(stats_netprobe['stats']) > 0:
 
