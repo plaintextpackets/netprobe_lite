@@ -45,6 +45,11 @@ class CustomCollector(object):
         total_loss = 0
         total_jitter = 0
 
+        # Initialize average values with defaults
+        average_latency = 0
+        average_loss = 0
+        average_jitter = 0
+
         # Check if there are any stats before proceeding
         if len(stats_netprobe['stats']) > 0:
 
@@ -77,9 +82,9 @@ class CustomCollector(object):
 
         else:
             # If no stats are available, report zeros for the aggregated metrics
-            g.add_metric(['latency', 'all'], 0)
-            g.add_metric(['loss', 'all'], 0)
-            g.add_metric(['jitter', 'all'], 0)     
+            g.add_metric(['latency', 'all'], average_latency)
+            g.add_metric(['loss', 'all'], average_loss)
+            g.add_metric(['jitter', 'all'], average_jitter)     
 
         yield g
 
