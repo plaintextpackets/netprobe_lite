@@ -75,6 +75,20 @@ docker compose up
 
 ## How to customize
 
+### Extend Data Retention
+
+By default, Netprobe is configured to retain data for 30 days. You can modify this retention period by editing the compose.yml file.
+
+1. Open the compose.yml file in a text editor.
+
+2. Locate the prometheus service and modify the following line under the command section:
+
+```
+command:
+...
+  - '--storage.tsdb.retention.time=30d'  # Set retention to 30 days (modify as needed)
+```
+
 ### Enable Speedtest
 
 By default the speed test feature is disabled as many users pay for bandwidth usage (e.g. cellular connections). To enable it, edit the .env file to set the option to 'True':
