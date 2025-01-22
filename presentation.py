@@ -44,25 +44,45 @@ class CustomCollector(object):
         total_loss = 0
         total_jitter = 0
 
-        for item in stats_netprobe['stats']: # Expose each individual latency / loss metric for each site tested
+        average_latency = 0
+        average_loss = 0
+        average_jitter = 0
 
-            g.add_metric(['latency',item['site']],item['latency'])
-            g.add_metric(['loss',item['site']],item['loss'])
-            g.add_metric(['jitter',item['site']],item['jitter'])            
+        # Check if there are any stats before proceeding
+        if len(stats_netprobe['stats']) > 0:
 
-        for item in stats_netprobe['stats']: # Aggregate all latency / loss metrics into one
+            for item in stats_netprobe['stats']:
+                # Safely get latency, loss, jitter, and site values with defaults if missing
+                latency = float(item.get('latency', 0))
+                loss = float(item.get('loss', 0))
+                jitter = float(item.get('jitter', 0))
+                site = item.get('site', 'unknown')
 
-            total_latency += float(item['latency'])
-            total_loss += float(item['loss'])
-            total_jitter += float(item['jitter'])
+                # Expose each individual latency/loss/jitter metric for each site tested
+                g.add_metric(['latency', site], latency)
+                g.add_metric(['loss', site], loss)
+                g.add_metric(['jitter', site], jitter)
 
-        average_latency = total_latency / len(stats_netprobe['stats'])
-        average_loss = total_loss / len(stats_netprobe['stats'])
-        average_jitter = total_jitter / len(stats_netprobe['stats'])
+                # Aggregate totals
+                total_latency += latency
+                total_loss += loss
+                total_jitter += jitter
 
-        g.add_metric(['latency','all'],average_latency)
-        g.add_metric(['loss','all'],average_loss)
-        g.add_metric(['jitter','all'],average_jitter)        
+            # Calculate averages
+            average_latency = total_latency / len(stats_netprobe['stats'])
+            average_loss = total_loss / len(stats_netprobe['stats'])
+            average_jitter = total_jitter / len(stats_netprobe['stats'])
+
+            # Add aggregated metrics for all sites
+            g.add_metric(['latency', 'all'], average_latency)
+            g.add_metric(['loss', 'all'], average_loss)
+            g.add_metric(['jitter', 'all'], average_jitter)
+
+        else:
+            # If no stats are available, report zeros for the aggregated metrics
+            g.add_metric(['latency', 'all'], 0)
+            g.add_metric(['loss', 'all'], 0)
+            g.add_metric(['jitter', 'all'], 0)     
 
         yield g
 
