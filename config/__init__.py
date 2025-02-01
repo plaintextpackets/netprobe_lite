@@ -26,7 +26,8 @@ class Config_Netprobe():
     DNS_NAMESERVER_3 = os.getenv('DNS_NAMESERVER_3')
     DNS_NAMESERVER_3_IP = os.getenv('DNS_NAMESERVER_3_IP')
     DNS_NAMESERVER_4 = os.getenv('DNS_NAMESERVER_4')
-    DNS_NAMESERVER_4_IP = os.getenv('DNS_NAMESERVER_4_IP')    
+    DNS_NAMESERVER_4_IP = os.getenv('DNS_NAMESERVER_4_IP')
+    DNS_SERVER_PORT = os.getenv('DNS_SERVER_PORT')
 
     nameservers = [
         (DNS_NAMESERVER_1,DNS_NAMESERVER_1_IP),
